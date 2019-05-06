@@ -1,1 +1,1 @@
-DROP TABLE public.dignostic_codes;
+DROP TABLE public.diagnostic_codes;
