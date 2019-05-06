@@ -150,4 +150,45 @@ describe('DiagnosticCodeRepository', () => {
         })
 
     })
+
+    describe('Delete', () => {
+        it('should delete the record if it exists in the system', async cb => {
+            let diagnosticCode = randomDiagnosticCode()
+
+            let queryResults = await client.query({
+                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+                                VALUES($1,$2,$3,$4,$5) RETURNING id`,
+                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+            })
+            expect(queryResults.rowCount > 0)
+            expect(queryResults.rows[0].id).toBeGreaterThan(0)
+
+            let deletedRecordId = await repo.remove(client, queryResults.rows[0].id)
+
+            expect(deletedRecordId).toBe(queryResults.rows[0].id)
+
+            //check that it was actually removed from the database
+            queryResults = await client.query({
+                text: `SELECT id from public.diagnostic_codes where id = ${deletedRecordId}`
+            })
+            expect(queryResults.rowCount).toBe(0)
+            cb()
+        })
+
+        it('When no record exists with the provided id, it should return an E_NOT_FOUND error code', async cb => {
+            try {
+
+                let not_exisiting_id = -822
+                //assert that it actually does not exist
+                let notExisiting = await find(client, `SELECT * from diagnostic_codes WHERE id=${not_exisiting_id}`)
+                expect(notExisiting).toBeUndefined() //assert that it's not in the database
+
+                await repo.remove(client, not_exisiting_id) //attempt to retreive that non existent record
+                cb('should throw')
+            } catch (err) {
+                expect(err.code).toBe(ErrorCodes.E_NOT_FOUND)
+                cb()
+            }
+        })
+    })
 })

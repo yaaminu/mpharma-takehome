@@ -80,6 +80,11 @@ export class DiagnosticCodeRepository {
         }
     }
 
+    /**
+     * Retrieve a record by id 
+     * @param client the database client
+     * @param id the id of the record to be retrieved
+     */
     public async findById(client: DbHelper, id: number): Promise<DiagnosticCode> {
         try {
             let queryResults = await client.query({
@@ -95,6 +100,31 @@ export class DiagnosticCodeRepository {
         }
 
     }
+    /**
+     * Given an id, remove the record whose id corresponds to that id form the database returning 
+     * the id if the deletion was successful or an error if no such record exists 
+     * @param {DbHelper} client the databse client
+     * @param  {number} id the id of the object to be removed
+     * @returns {Promise<number>} the id of the deleted record or an error if no such record exists
+     */
+    public async remove(client: DbHelper, id: number): Promise<any> {
+
+        try {
+            let queryResults = await client.query({
+                text: 'DELETE FROM public.diagnostic_codes WHERE id=$1 RETURNING id',
+                values: [id]
+            })
+            if (queryResults.rowCount === 0) return Promise.reject(new ApplicationError(ErrorCodes.E_NOT_FOUND, 'No record found'))
+            return Promise.resolve(queryResults.rows[0].id)
+        } catch (err) {
+            return Promise.reject(new ApplicationError(this.getApplicationErrorCode(err.code), err.message, err))
+        }
+
+    }
+
+    /**
+     * @param postgresErrorCode maps a postgres error code to our application specific error codes
+     */
     private getApplicationErrorCode(postgresErrorCode: string) {
         switch (postgresErrorCode) {
             case '23505':
