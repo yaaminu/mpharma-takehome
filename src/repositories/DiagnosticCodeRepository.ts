@@ -36,17 +36,15 @@ export class DiagnosticCodeRepository {
         }
     }
 
-
-    // public async findDiagnosticCodeById(client: DbHelper, id: number): Promise<DiagnosticCode> {
-    //     try {
-    //         let queryResults = await client.query({
-    //             text: `SELECT * from diagnostic_codes WHERE id=${$1}`,
-    //             value: [id]
-    //         })
-    //     } catch
-
-    // }
-
+    /**
+     * Given an id, update a particular record that matches this id with the data provided, there's no restriction 
+     * on the updatable columns except the id. 
+     * @param {DbHelper} client the database client
+     * @param {number} id the id of the record to be updated
+     * @param {any} data the new update
+     * 
+     * @returns {Promise<DiagnosticCode>} the udpated record
+     */
     public async update(client: DbHelper, id: number, data: any): Promise<DiagnosticCode> {
         try {
 
@@ -121,6 +119,10 @@ export class DiagnosticCodeRepository {
         }
 
     }
+
+
+
+
 
     /**
      * @param postgresErrorCode maps a postgres error code to our application specific error codes
