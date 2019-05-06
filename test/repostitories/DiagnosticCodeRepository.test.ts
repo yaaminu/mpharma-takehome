@@ -114,4 +114,40 @@ describe('DiagnosticCodeRepository', () => {
             }
         })
     })
+
+    describe('FindById', () => {
+        it('should retrieve a record if it exists', async cb => {
+            let diagnosticCode = randomDiagnosticCode()
+            let queryResults = await client.query({
+                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+                                VALUES($1,$2,$3,$4,$5) RETURNING id`,
+                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+            })
+            let id = queryResults.rows[0].id
+            expect(id).toBeGreaterThan(0)
+
+            //check that we it's actually able to retrieve the record
+            let retrievedDiagnosticCode = await repo.findById(client, id)
+            expect(retrievedDiagnosticCode).not.toBeNull()
+            expect(retrievedDiagnosticCode).toMatchObject({ ...diagnosticCode, id: id })
+            cb()
+        })
+
+        it('should return a not found error code when no matching record is found', async cb => {
+            try {
+
+                let not_exisiting_id = -37383
+                //assert that it actually does not exist
+                let notExisiting = await find(client, `SELECT * from diagnostic_codes WHERE id=${not_exisiting_id}`)
+                expect(notExisiting).toBeUndefined() //assert that it's not in the database
+
+                await repo.findById(client, not_exisiting_id) //attempt to retreive that non existent record
+                cb('should throw')
+            } catch (err) {
+                expect(err.code).toBe(ErrorCodes.E_NOT_FOUND)
+                cb()
+            }
+        })
+
+    })
 })

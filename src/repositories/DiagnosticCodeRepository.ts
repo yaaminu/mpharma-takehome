@@ -80,6 +80,21 @@ export class DiagnosticCodeRepository {
         }
     }
 
+    public async findById(client: DbHelper, id: number): Promise<DiagnosticCode> {
+        try {
+            let queryResults = await client.query({
+                text: 'SELECT * from public.diagnostic_codes WHERE id=$1',
+                values: [id]
+            })
+            if (queryResults.rowCount === 0) {
+                return Promise.reject(new ApplicationError(ErrorCodes.E_NOT_FOUND, 'No such record found'))
+            }
+            return queryResults.rows[0]
+        } catch (err) {
+            return Promise.reject(new ApplicationError(this.getApplicationErrorCode(err.code), err.message, err))
+        }
+
+    }
     private getApplicationErrorCode(postgresErrorCode: string) {
         switch (postgresErrorCode) {
             case '23505':
