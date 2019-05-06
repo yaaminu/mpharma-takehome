@@ -1,9 +1,9 @@
 interface DiagnosticCode {
-    readonly id: Number,
-    readonly categoryName: String,
-    readonly shortDescription: String,
-    readonly fullDescription: String,
-    readonly icd9Code: String,
-    readonly icd10Code: String
+    readonly id: number,
+    readonly categoryName: string,
+    readonly shortDescription: string,
+    readonly fullDescription: string,
+    readonly icd9Code: string,
+    readonly icd10Code: string
 }
 
