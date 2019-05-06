@@ -18,7 +18,7 @@ export class DiagnosticCodeRepository {
      * 
      * @throws @type {ApplicationError} containing an error code and a detailed message.
      */
-    public async add(client: DbHelper, diagnosticCode: DiagnosticCode): Promise<number> {
+    public async add(client: DbHelper, diagnosticCode: AddDiagnosticCodeDTO): Promise<number> {
         try {
             let queryResults = await client.query({
                 text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
@@ -45,7 +45,7 @@ export class DiagnosticCodeRepository {
      * 
      * @returns {Promise<DiagnosticCode>} the udpated record
      */
-    public async update(client: DbHelper, id: number, data: any): Promise<DiagnosticCode> {
+    public async update(client: DbHelper, id: number, data: UpdateDiagnosticCodeDTO): Promise<DiagnosticCode> {
         try {
 
             //update the record, we give priority to the newly supplied data from the outside 
