@@ -20,7 +20,7 @@ export default {
         if (!isEmpty(input.revision || '') && !!input.full_code) {
 
             if (['ICD-9', 'ICD-10'].indexOf(input.revision!!) === -1) {
-                throw new ValidationError('revision can eithe be "ICD-9" or "ICD-10" but was ' + input.revision)
+                throw new ValidationError('revision can either be "ICD-9" or "ICD-10" but was ' + input.revision)
             }
 
             if (input.revision === 'ICD-9') {
