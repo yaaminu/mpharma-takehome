@@ -1,5 +1,5 @@
 
-import { ValidationError } from '../Errors/ValidationError';
+import { ValidationError } from '../errors/ValidationError';
 
 
 export default {
@@ -18,7 +18,7 @@ export default {
         if (isNaN(input.page)) {
             throw new ValidationError('page  must be a number')
         }
-        
+
         if (input.page <= 0) {
             throw new ValidationError('page must be >= 1')
         }
