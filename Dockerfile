@@ -9,5 +9,5 @@ RUN tsc -p "./tsconfig.json"
 
 EXPOSE 5000 
 
-CMD [ "npm", "start"]
+CMD ["npm", "start"]
 
