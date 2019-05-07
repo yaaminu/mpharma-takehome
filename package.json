@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "nodemon build/src/index.js",
+    "start": "node build/src/index.js",
     "test": "PGHOST=localhost  PGUSER=postgres PGPASSWORD=postgres  PGDATABASE=mpharma  npx jest --watch"
   },
   "keywords": [],
