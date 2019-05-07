@@ -6,7 +6,7 @@ import { ErrorCodes } from "../../src/errors/ApplicationError";
 describe('AddDiagnosticCodeValidator', () => {
 
     describe('validate', () => {
-        it('valid input should raise any exception', cb => {
+        it('valid input should not raise any exception', cb => {
             let input = randomDiagnosticCode()
             expect(() => { AddDiagnosticCodeValidator.validate(input) }).not.toThrow()
             cb()
