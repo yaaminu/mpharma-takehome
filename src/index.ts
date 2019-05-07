@@ -10,7 +10,17 @@ const client = new DbHelper()
 
 app.use(BodyParser.json())
 app.use(BodyParser.urlencoded({ extended: false }))
-
+app.use((req, res, next) => {
+    if (req.body) {
+        let keys = Object.keys(req.body)
+        keys.forEach(key => {
+            if (typeof req.body[key] === 'string') {
+                req.body[key] = req.body[key].trim()
+            }
+        })
+    }
+    next()
+})
 
 app.use('/api/v1/diagnostic_codes', new DiagnosticCodesRouter(client).getRouter())
 
