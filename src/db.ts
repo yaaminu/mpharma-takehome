@@ -3,7 +3,7 @@ import { Client, QueryResult } from 'pg'
 /**
  * A simple wrapper around the node-pg Client Object
  * that simplify certain operaitons. Beware that for the most part, it just forwards 
- * all inputs without taking any measures to even sanitize any input!
+ * all inputs without taking any measures to even sanitize them!
  */
 export class DbHelper {
     readonly client: Client
