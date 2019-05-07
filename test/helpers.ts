@@ -1,7 +1,6 @@
 import { DbHelper } from "../src/db";
 
-export function randomDiagnosticCode(): DiagnosticCode {
-
+export function randomDiagnosticCode(): AddDiagnosticCodeDTO {
     //TODO use a real world diagnostic code source.
     return {
         category_name: 'Category Name',
