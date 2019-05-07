@@ -1,5 +1,5 @@
 import { DiagnosticCodeRepository } from '../../src/repositories/DiagnosticCodeRepository';
-import { randomDiagnosticCode, find } from '../helpers';
+import { randomDiagnosticCode, find, bulkInsertDiagnosticCodes } from '../helpers';
 import { ErrorCodes } from '../../src/Errors/ApplicationError';
 import { DbHelper } from '../../src/db';
 
@@ -189,6 +189,105 @@ describe('DiagnosticCodeRepository', () => {
                 expect(err.code).toBe(ErrorCodes.E_NOT_FOUND)
                 cb()
             }
+        })
+    })
+
+    describe('list', () => {
+
+        it('Given a limit and a page number, it should be able to list items in batches of that limit #1', async cb => {
+
+            let count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("0")
+
+            await bulkInsertDiagnosticCodes(client, 100); //inserts fake 100 diagnostic codes
+
+            //ensure that we have actually 100 entries
+            count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("100")
+
+            let i = 0
+            while (++i <= 5) {
+                let listQuery = {
+                    limit: 20,
+                    page: i
+                }
+                let diagnosticCodesResponse = await repo.list(client, listQuery)
+                expect(diagnosticCodesResponse.limit).toBe(20)
+                expect(diagnosticCodesResponse.page).toBe(i)
+                expect(diagnosticCodesResponse.values.length).toBe(20)
+            }
+            cb()
+        })
+
+
+        it('Given a limit and a page number, it should be able to list items in batches of that limit #2', async cb => {
+
+            let count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("0")
+
+            await bulkInsertDiagnosticCodes(client, 100); //inserts fake 100 diagnostic codes
+
+            //ensure that we have actually 100 entries
+            count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("100")
+
+            let i = 0
+            while (++i <= 25) {
+                let listQuery = {
+                    limit: 4,
+                    page: i
+                }
+                let diagnosticCodesResponse = await repo.list(client, listQuery)
+                expect(diagnosticCodesResponse.limit).toBe(4)
+                expect(diagnosticCodesResponse.page).toBe(i)
+                expect(diagnosticCodesResponse.values.length).toBe(4)
+            }
+            cb()
+        })
+
+
+        it('Should return an empty results when page number exceeds available data', async cb => {
+
+            let count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("0")
+
+            await bulkInsertDiagnosticCodes(client, 5); //inserts fake 5 diagnostic codes
+
+            //ensure that we have actually 5 entries 
+            count = (await client.query('SELECT count(1) from public.diagnostic_codes')).rows[0].count
+            expect(count).toBe("5")
+
+            let results = await repo.list(client, { limit: 20, page: 2 })
+            expect(results.limit).toBe(20)
+            expect(results.page).toBe(2)
+            expect(results.values.length).toBe(0)
+
+
+            results = await repo.list(client, { limit: 5, page: 2 })
+            expect(results.limit).toBe(5)
+            expect(results.page).toBe(2)
+            expect(results.values.length).toBe(0)
+            cb()
+        })
+
+        it('should return the total number of pages', async cb => {
+            let count = (await client.query('SELECT count(1) from diagnostic_codes')).rows[0].count
+            expect(count).toBe("0")
+
+            await bulkInsertDiagnosticCodes(client, 27); //inserts fake 27 diagnostic codes
+
+            //ensure that we have actually 27 entries 
+            count = (await client.query('SELECT count(1) from public.diagnostic_codes')).rows[0].count
+            expect(count).toBe("27")
+
+            let results = await repo.list(client, { limit: 5, page: 1 })
+            expect(results.limit).toBe(5)
+            expect(results.page).toBe(1)
+            expect(results.values.length).toBe(5)
+            expect(results.totalPageCount).toBe(6)
+            cb()
+
+            // cb('fail')
         })
     })
 })

@@ -1,5 +1,5 @@
 interface DiagnosticCode {
-    id?: number,
+    id: number,
     readonly category_name: string,
     readonly short_desc: string,
     readonly full_desc: string,

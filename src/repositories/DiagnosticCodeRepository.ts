@@ -1,5 +1,6 @@
 import { ErrorCodes, ApplicationError } from '../Errors/ApplicationError';
 import { DbHelper } from '../db';
+import { ListQueryResultsDTO } from '../dto/ListQueryResultsDTO';
 
 /**
  * Provides an interface for manipulating the diagnostic_codes table. 
@@ -122,6 +123,29 @@ export class DiagnosticCodeRepository {
 
 
 
+    public async list(client: DbHelper, listQuery: ListQueryDTO): Promise<ListQueryResultsDTO<DiagnosticCode>> {
+        let offset = (Math.max(0, listQuery.page - 1)) * listQuery.limit
+        try {
+
+            //idealy this should run in a ßtransaction to ensure the data set is not modified in the middle of the query.
+
+            let queryResults = await client.query({
+                text: 'SELECT * FROM public.diagnostic_codes ORDER BY id ASC LIMIT $1 OFFSET $2',
+                values: [listQuery.limit, offset]
+            })
+
+            let countQueryResults = await (client.query('SELECT COUNT(1) FROM public.diagnostic_codes'))
+
+            return {
+                limit: listQuery.limit,
+                page: listQuery.page,
+                totalPageCount: Math.ceil(countQueryResults.rows[0].count / listQuery.limit),
+                values: queryResults.rows
+            }
+        } catch (err) {
+            return Promise.reject(new ApplicationError(this.getApplicationErrorCode(err.code), err.message, err))
+        }
+    }
 
 
     /**
