@@ -44,15 +44,14 @@ app.use((err: any, __: express.Request, res: express.Response, _: (err: any) => 
     })
 })
 
-client.connect().then(
-    () => {
-        console.log('Connection to database established!!!')
-        app.listen(process.env.PORT || 5000, () => {
-            console.log('App is listening for new connections')
-        })
-    }).catch(err => {
-        console.error('Error while connecting to the database, are you sure it\'s running')
-
+client.connect().then(() => {
+    console.log('Connection to database established!!!')
+    app.listen(process.env.PORT || 5000, () => {
+        console.log('App is listening for new connections')
     })
+}).catch(err => {
+    console.error('Error while connecting to the database, are you sure it\'s running')
+    console.error(err)
+})
 
 
