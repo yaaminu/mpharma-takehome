@@ -1,4 +1,4 @@
-import { ErrorCodes, ApplicationError } from '../Errors/ApplicationError';
+import { ErrorCodes, ApplicationError } from '../errors/ApplicationError';
 import { DbHelper } from '../db';
 import { ListQueryResultsDTO } from '../dto/ListQueryResultsDTO';
 
@@ -22,9 +22,9 @@ export class DiagnosticCodeRepository {
     public async add(client: DbHelper, diagnosticCode: AddDiagnosticCodeDTO): Promise<number> {
         try {
             let queryResults = await client.query({
-                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,full_code,revision)
                                 VALUES($1,$2,$3,$4,$5) RETURNING id`,
-                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.full_code, diagnosticCode.revision]
             })
             return queryResults.rows[0].id
 
@@ -59,13 +59,13 @@ export class DiagnosticCodeRepository {
                         UPDATE public.diagnostic_codes SET category_name=COALESCE($1,to_update.category_name),
                                 short_desc=COALESCE($2,to_update.short_desc),
                                 full_desc=COALESCE($3,to_update.full_desc),
-                                icd9_code=COALESCE($4,to_update.icd9_code),
-                                icd10_code=COALESCE($5,to_update.icd10_code)
+                                full_code=COALESCE($4,to_update.full_code),
+                                revision=COALESCE($5,to_update.revision)
                                 FROM to_update
                                 WHERE public.diagnostic_codes.id=$6 
                                 RETURNING public.diagnostic_codes.*
                     `,
-                values: [data.category_name, data.short_desc, data.full_desc, data.icd9_code, data.icd10_code, id]
+                values: [data.category_name, data.short_desc, data.full_desc, data.full_code, data.revision, id]
             })
 
 

@@ -4,8 +4,8 @@ export function randomDiagnosticCode(): AddDiagnosticCodeDTO {
     //TODO use a real world diagnostic code source.
     return {
         category_name: 'Category Name',
-        icd10_code: 'icd10Code',
-        icd9_code: 'icd9Code',
+        full_code: '000.20',
+        revision: 'ICD-9',
         short_desc: 'Short description',
         full_desc: 'full description'
     }
@@ -27,14 +27,14 @@ export async function bulkInsertDiagnosticCodes(client: DbHelper, count: number)
 
     while (count-- > 0) {
         let diagnosticCode = {
-            category_name: 'category name' + count, short_desc: 'short desc ' + count, full_desc: 'full description of the drug' + count,
-            icd9_code: '001.0_' + count, icd10_code: 'A001.0_' + count
+            category_name: 'category name' + count, short_desc: 'short desc ' + count, full_desc: 'full description of the diagnosis' + count,
+            revision: count % 2 === 0 ? 'ICD-9' : 'ICD-10', full_code: 'A001.0_' + count
         }
         bulkData.push(diagnosticCode)
         await client.query({
-            text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+            text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,full_code,revision)
                         VALUES($1,$2,$3,$4,$5) RETURNING id`,
-            values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+            values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.full_code, diagnosticCode.revision]
         })
     }
     return bulkData

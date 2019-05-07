@@ -28,8 +28,8 @@ export default class DiagnosticCodesRouter {
                     category_name: req.body.category_name || '',
                     full_desc: req.body.full_desc || '',
                     short_desc: req.body.short_desc || '',
-                    icd9_code: req.body.icd9_code || '',
-                    icd10_code: req.body.icd10_code || ''
+                    full_code: req.body.full_code || '',
+                    revision: req.body.revision || ''
                 }
 
                 AddDiagnosticCodeValidator.validate(newDiagnosticCode) //might throw
@@ -46,7 +46,7 @@ export default class DiagnosticCodesRouter {
             }
         })
 
-        
+
         this.router.get('/', async (req, res, next) => {
             try {
                 let listQuery = {
@@ -77,8 +77,8 @@ export default class DiagnosticCodesRouter {
                     category_name: req.body.category_name,
                     full_desc: req.body.full_desc,
                     short_desc: req.body.short_desc,
-                    icd9_code: req.body.icd9_code,
-                    icd10_code: req.body.icd10_code
+                    full_code: req.body.full_code,
+                    revision: req.body.revision
                 }
 
                 UpdateDiagnosticCodeValidator.validate(update) //might throw

@@ -1,6 +1,6 @@
 import { DiagnosticCodeRepository } from '../../src/repositories/DiagnosticCodeRepository';
 import { randomDiagnosticCode, find, bulkInsertDiagnosticCodes } from '../helpers';
-import { ErrorCodes } from '../../src/Errors/ApplicationError';
+import { ErrorCodes } from '../../src/errors/ApplicationError';
 import { DbHelper } from '../../src/db';
 
 
@@ -119,9 +119,9 @@ describe('DiagnosticCodeRepository', () => {
         it('should retrieve a record if it exists', async cb => {
             let diagnosticCode = randomDiagnosticCode()
             let queryResults = await client.query({
-                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,full_code,revision)
                                 VALUES($1,$2,$3,$4,$5) RETURNING id`,
-                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.full_code, diagnosticCode.revision]
             })
             let id = queryResults.rows[0].id
             expect(id).toBeGreaterThan(0)
@@ -156,9 +156,9 @@ describe('DiagnosticCodeRepository', () => {
             let diagnosticCode = randomDiagnosticCode()
 
             let queryResults = await client.query({
-                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,icd9_code,icd10_code)
+                text: `INSERT INTO public.diagnostic_codes(category_name,short_desc,full_desc,full_code,revision)
                                 VALUES($1,$2,$3,$4,$5) RETURNING id`,
-                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.icd9_code, diagnosticCode.icd10_code]
+                values: [diagnosticCode.category_name, diagnosticCode.short_desc, diagnosticCode.full_desc, diagnosticCode.full_code, diagnosticCode.revision]
             })
             expect(queryResults.rowCount > 0)
             expect(queryResults.rows[0].id).toBeGreaterThan(0)

@@ -2,6 +2,6 @@ interface UpdateDiagnosticCodeDTO {
     readonly category_name?: string,
     readonly short_desc?: string,
     readonly full_desc?: string,
-    readonly icd9_code?: string,
-    readonly icd10_code?: string
+    readonly full_code?: string,
+    readonly revision?: string
 }

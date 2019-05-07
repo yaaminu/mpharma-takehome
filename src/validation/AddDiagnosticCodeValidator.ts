@@ -1,5 +1,5 @@
 import { isEmpty } from 'validator'
-import { ValidationError } from '../Errors/ValidationError';
+import { ValidationError } from '../errors/ValidationError';
 
 /**
  * Checks that the input is valid throwing a validation error if that's 
@@ -19,12 +19,28 @@ export default {
             throw new ValidationError('short_desc is required')
         }
 
-        if (isEmpty(input.icd9_code, { ignore_whitespace: true })) {
-            throw new ValidationError('icd9_code is required')
+        if (isEmpty(input.full_code, { ignore_whitespace: true })) {
+            throw new ValidationError('full_code is required')
         }
 
-        if (isEmpty(input.icd10_code, { ignore_whitespace: true })) {
-            throw new ValidationError('icd10_code is required')
+        if (isEmpty(input.revision, { ignore_whitespace: true })) {
+            throw new ValidationError('revision is required')
+        }
+
+        if (['ICD-9', 'ICD-10'].indexOf(input.revision!!) === -1) {
+            throw new ValidationError('revision can either be "ICD-9" or "ICD-10" but was ' + input.revision)
+        }
+
+        if (input.revision === 'ICD-9') {
+            if (input.full_code.length < 3 || input.full_code.replace('.', '').length > 5) {
+                throw new ValidationError('full_code is not a valid ICD-9 code')
+            }
+        }
+
+        if (input.revision === 'ICD-10') {
+            if (input.full_code.length < 3 || input.full_code.replace('.', '').length > 7) {
+                throw new ValidationError('full_code is not a valid ICD-10 code')
+            }
         }
     }
 }
