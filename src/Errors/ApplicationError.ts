@@ -28,10 +28,10 @@ export class ApplicationError {
 }
 
 export const enum ErrorCodes {
-    E_UNKNOWN,
-    E_VALIDATION,
-    E_DUPLICATE,
-    E_NOT_IMPLEMENTED,
-    E_NOT_FOUND
+    E_UNKNOWN = "E_UNKNOWN",
+    E_VALIDATION = "E_VALIDATION",
+    E_DUPLICATE = "E_DUPLICATE",
+    E_NOT_IMPLEMENTED = "E_NOT_IMPLEMENTED",
+    E_NOT_FOUND = "E_NOT_FOUND"
 }
 

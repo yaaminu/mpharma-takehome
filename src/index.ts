@@ -12,7 +12,7 @@ app.use(BodyParser.json())
 app.use(BodyParser.urlencoded({ extended: false }))
 
 
-app.use('/api/v1/', new DiagnosticCodesRouter(client).getRouter())
+app.use('/api/v1/diagnostic_codes', new DiagnosticCodesRouter(client).getRouter())
 
 
 /** Error Hanlders */
@@ -24,8 +24,11 @@ app.use((_, __, next) => {
 })
 
 app.use((err: any, __: express.Request, res: express.Response, _: (err: any) => void) => {
+    console.error(`An error occured while processing request: ${err.message} \n`)
+    console.dir(err)
     res.status(err.status || 500).json({
         status: err.status || 500,
+        code: err.code || 'unknown',
         message: err.message,
         stack_trace: process.env.NODE_ENV === 'development' ? err : {}
     })

@@ -122,13 +122,11 @@ export class DiagnosticCodeRepository {
     }
 
 
-
     public async list(client: DbHelper, listQuery: ListQueryDTO): Promise<ListQueryResultsDTO<DiagnosticCode>> {
         let offset = (Math.max(0, listQuery.page - 1)) * listQuery.limit
         try {
 
             //idealy this should run in a ßtransaction to ensure the data set is not modified in the middle of the query.
-
             let queryResults = await client.query({
                 text: 'SELECT * FROM public.diagnostic_codes ORDER BY id ASC LIMIT $1 OFFSET $2',
                 values: [listQuery.limit, offset]
