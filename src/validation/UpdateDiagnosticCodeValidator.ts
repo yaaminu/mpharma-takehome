@@ -14,7 +14,7 @@ export default {
             isEmpty(input.full_code || '', { ignore_whitespace: true }) &&
             isEmpty(input.revision || '', { ignore_whitespace: true })) {
 
-            throw new ValidationError('At least on field should be supplied')
+            throw new ValidationError('At least one field should be supplied')
         }
 
         if (!isEmpty(input.revision || '') && !!input.full_code) {
