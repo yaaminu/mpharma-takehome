@@ -1,10 +1,8 @@
 import { Router } from 'express'
 import { DbHelper } from '../db';
 import { DiagnosticCodeRepository } from '../repositories/DiagnosticCodeRepository';
-import AddDiagnosticCodeDTOValidator from '../validation/AddDiagnosticCodeValidator'
 import AddDiagnosticCodeValidator from '../validation/AddDiagnosticCodeValidator';
 import UpdateDiagnosticCodeValidator from '../validation/UpdateDiagnosticCodeValidator';
-import { request } from 'https';
 import ListDiagnosticRecordsValidator from '../validation/ListDiagnosticRecordsValidator';
 
 
