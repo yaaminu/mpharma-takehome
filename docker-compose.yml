@@ -4,6 +4,8 @@ services:
     image: "postgres:10"
     environment: 
      - POSTGRES_DB=mpharma
+    ports: 
+      - "5432:5432"
   web:
     build: .
     image: app
