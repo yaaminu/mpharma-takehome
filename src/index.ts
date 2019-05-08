@@ -54,4 +54,6 @@ client.connect().then(() => {
     console.error(err)
 })
 
-
+process.on('beforeExit', () => {
+    console.log('exiting')
+})

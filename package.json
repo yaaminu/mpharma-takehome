@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "node build/src/index.js",
-    "migrate":"./node_modules/.bin/node-pg-migrate",
+    "migrate": "./node_modules/.bin/node-pg-migrate up",
     "test": "PGHOST=localhost  PGUSER=postgres PGPASSWORD=postgres  PGDATABASE=mpharma  npx jest --watch"
   },
   "keywords": [],
