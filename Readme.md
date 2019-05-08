@@ -69,6 +69,7 @@ Table 3.0
    	npm test 
    ```
 
+*NOTE* All the http routes were tested manually for brevity sake. 
 
 ## Technical Consideration
 
