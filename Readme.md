@@ -57,11 +57,10 @@ Table 3.0
 
 ## Testing
 
-1. Ensure that there's a running postgres instance and check that following set up exists
- 1. database named `mpharma` exists
- 2. postgres user named `postgres` with password `postgres` exists
-
-2. Jump into the project root and run the following in your terminal:
+1. Ensure that there's a running postgres instance 
+2. A database named `mpharma` exists
+3. A postgres user named `postgres` with password `postgres` exists
+4. Jump into the project root and run the following in your terminal:
 	
    ``` bash
    	npm install --dev 
@@ -73,5 +72,7 @@ Table 3.0
 
 ## Technical Consideration
 
-I made a few tradeoffs worth m
+The new ICD-10 introduced some backward incompatible changes. However that change matters if one relies on the semantics in the code. I decided against that and just treated all codes as a series of charaters and required the version to be explictly specified by the user. Offloading that burden to the user simplified the system. To ensure users don't supply invalid codes, I implemented a rudimentary checks to ensure that supplied codes match with the version specified. 
+
+However, the tradeoff is that it'll be more challenging to take advantage of the semantic meanings embeded in the codes in the future assuming this were a real project.
 
