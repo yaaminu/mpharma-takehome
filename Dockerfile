@@ -1,10 +1,11 @@
 FROM node:11.9.0
 
-ADD . /app 
-WORKDIR  /app 
-
 RUN npm install typescript -g
-RUN npm install -y 
+ADD 'package.json' 'package-lock.json' /app/ 
+WORKDIR  /app 
+RUN npm install
+
+ADD . /app 
 RUN tsc -p "./tsconfig.json"
 
 EXPOSE 5000 
