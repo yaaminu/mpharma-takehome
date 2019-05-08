@@ -43,7 +43,7 @@ describe('UpdateDiagnosticCodeValidator', () => {
                 cb('expected an exception to be raised but none was raised')
             } catch (err) {
                 expect(err.code).toBe(ErrorCodes.E_VALIDATION)
-                expect(err.message).toBe('At least on field should be supplied')
+                expect(err.message).toBe('At least one field should be supplied')
                 cb()
             }
         })
