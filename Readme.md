@@ -84,10 +84,10 @@ Table 3.0
 4. Jump into the project root and run the following in your terminal:
 	
    ``` bash
-   	npm install npx typescript -g 
+	npm install npx typescript -g 
 	npm install --dev 
-   	npm run migrate
-   	npm test 
+	npm run migrate
+	npm test 
    ```
 
 *NOTE* All the http routes were tested manually for brevity sake. 
