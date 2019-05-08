@@ -85,7 +85,7 @@ Table 3.0
 	
    ``` bash
 	npm install npx typescript -g 
-	npm install --dev 
+	npm install
 	npm run migrate
 	npm test 
    ```
