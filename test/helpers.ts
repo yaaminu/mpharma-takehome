@@ -28,7 +28,7 @@ export async function bulkInsertDiagnosticCodes(client: DbHelper, count: number)
     while (count-- > 0) {
         let diagnosticCode = {
             category_name: 'category name' + count, short_desc: 'short desc ' + count, full_desc: 'full description of the diagnosis' + count,
-            revision: count % 2 === 0 ? 'ICD-9' : 'ICD-10', full_code: 'A001.0_' + count
+            revision: count % 2 === 0 ? 'ICD-9' : 'ICD-10', full_code: 'A001.0' + count
         }
         bulkData.push(diagnosticCode)
         await client.query({
