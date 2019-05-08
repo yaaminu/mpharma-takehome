@@ -37,7 +37,7 @@ export default class DiagnosticCodesRouter {
                 //notice we don't handle errors here, 
                 let newlyAddedDiagCodeId = await self.diagnosticCodesRepo.add(self.client, newDiagnosticCode)
                 res.status(201).json({
-                    id: newlyAddedDiagCodeId,
+                    value: newlyAddedDiagCodeId,
                     status: 201,
                     message: 'Success'
                 })
@@ -56,7 +56,7 @@ export default class DiagnosticCodesRouter {
 
                 ListDiagnosticRecordsValidator.validate(listQuery)
                 let listResults = await self.diagnosticCodesRepo.list(self.client, listQuery)
-                return res.status(200).json(listResults)
+                return res.status(200).json({ ...listResults, status: 200, message: 'success' })
             } catch (err) {
                 return next(err)
             }
@@ -65,7 +65,7 @@ export default class DiagnosticCodesRouter {
         this.router.get('/:id', async (req, res, next) => {
             try {
                 let diagnosticCode = await self.diagnosticCodesRepo.findById(self.client, req.params.id)
-                return res.status(200).json(diagnosticCode)
+                return res.status(200).json({ value: diagnosticCode, status: 200, message: 'success' })
             } catch (err) {
                 return next(err)
             }
@@ -83,7 +83,11 @@ export default class DiagnosticCodesRouter {
 
                 UpdateDiagnosticCodeValidator.validate(update) //might throw
                 let updateRecord = await self.diagnosticCodesRepo.update(self.client, req.params.id, update)
-                return res.status(200).json(updateRecord)
+                return res.status(200).json({
+                    status: 200,
+                    value: updateRecord,
+                    message: 'success'
+                })
             } catch (err) {
                 return next(err)
             }
@@ -93,8 +97,9 @@ export default class DiagnosticCodesRouter {
             try {
                 let deletedItemId = await self.diagnosticCodesRepo.remove(self.client, req.params.id)
                 return res.status(200).json({
-                    message: 'Deleted successfully',
-                    id: deletedItemId
+                    message: 'success',
+                    value: deletedItemId,
+                    status: 200
                 })
             } catch (err) {
                 return next(err)
